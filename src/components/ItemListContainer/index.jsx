@@ -1,35 +1,46 @@
 import { useEffect, useState } from "react";
-import Products from "../../mocks/products";
-
+import {collection,getDocs,getFirestore,query,where} from "firebase/firestore";
 import ItemList from "../ItemList";
+import Spinner from 'react-bootstrap/Spinner';
 
 function ItemListContainer({ categoryId, isCategoryRoute }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    const productsPromise = new Promise((resolve, reject) =>
-      setTimeout(() => resolve(Products), 2000)
-    );
+    const db = getFirestore();
+    const itemsCollection = collection(db, "products");
 
-    productsPromise
-      .then((response) => {
-        if (isCategoryRoute) {
-          const productsFiltered = response.filter(
-            (product) => product.category === categoryId
-          );
-          setProducts(productsFiltered);
-        } else {
-          setProducts(response);
-        }
-      })
-      .catch((err) => console.log(err));
+    if (isCategoryRoute) {
+      const queryResult = query(
+        itemsCollection,
+        where("category", "==", categoryId)
+      );
+      getDocs(queryResult)
+        .then((snapshot) => {
+          const docs = snapshot.docs;
+          setProducts(docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+        })
+        .catch((error) => console.log({ error }));
+    } else {
+      getDocs(itemsCollection)
+        .then((snapshot) => {
+          const docs = snapshot.docs;
+          setProducts(docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+        })
+        .catch((error) => console.log({ error }));
+    }
   }, [categoryId]);
+
+  if (!products) {
+    return <div><Spinner animation="border" variant="primary"/></div>;
+  }
 
   return (
     <div>
       <ItemList products={products} />
     </div>
   );
+
 }
 
 export default ItemListContainer;

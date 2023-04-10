@@ -79,7 +79,7 @@ export default [
 { id: 28, name: "Pharmaton",description: "Pharmaton",stock: 100, image: pharmaton,category: "farmacia",money: "$U",price: 360, },
 { id: 29, name: "Tostop",description: "Tostop",stock: 100, image: tostop,category: "farmacia",money: "$U",price: 270, },
 { id: 30, name: "Aliviol Flex",description: "Aliviol Flex",stock: 100, image: aliviolflex,category: "farmacia",money: "$U",price: 200, },
-{ id: 31, name: "Calza Infantil Negro T 12 al 16",description: "Calza Infantil Negro Talles 12 al 16",stock: 100, image: calzainfantilnegro12al16,category: "ropa",money: "$U",price: 450, },
+{ id: 31, name: "Calza Infantil Negro T 12 al 16",description: "Calza Infantil Negro Talles 12 al 16",stock: 0, image: calzainfantilnegro12al16,category: "ropa",money: "$U",price: 450, },
 { id: 32, name: "Camisa Hombre Celeste T S al XL",description: "Camisa Hombre Celeste Talles S al XL",stock: 100, image: camisahombrecelestesalxl,category: "ropa",money: "$U",price: 650, },
 { id: 33, name: "Musculosa Azul Hombre T S",description: "Musculosa Azul Hombre Talle S",stock: 100, image: musculosahombres,category: "ropa",money: "$U",price: 500, },
 { id: 34, name: "Palazzo Infantil Rosa T 4 al 10",description: "Palazzo Infantil Rosa Talles 4 al 10",stock: 100, image: palazzoinfantilrosa4al10,category: "ropa",money: "$U",price: 750, },

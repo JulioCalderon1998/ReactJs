@@ -1,4 +1,5 @@
 import React from "react";
+import { useContext } from "react";
 import {
   MDBContainer,
   MDBRow,
@@ -8,11 +9,15 @@ import {
   MDBCardImage,
 } from "mdb-react-ui-kit";
 
+import { Context } from "../../context";
 import "./item.css";
 import { NavLink } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 
 function Item({ product }) {
+  const { onAdd } = useContext(Context);
+
+
   return (
     <MDBContainer fluid>
       <MDBRow className="justify-content-center mb-3">
@@ -43,9 +48,10 @@ function Item({ product }) {
                     <Button className="btn-detalle">
                     <NavLink  to={`/item/${product.id}`}>Detalle</NavLink>                      
                     </Button>
-                    <button className="btn-carrito">
+                    {product.stock > 0 && (<button className="btn-carrito" onClick={() => onAdd(product, 1)}>
                     Añadir al Carrito
-                    </button>
+                    </button>)}
+                    {product.stock === 0 && (<p className="pStock">Sin stock en este momento!</p>)}
                   </div>
                 </MDBCol>
               </MDBRow>

@@ -1,27 +1,41 @@
 import React from 'react';
-import Products from "../../mocks/products";
+import Spinner from 'react-bootstrap/Spinner';
 import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import "./itemDetCont.css";
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
+import ItemDetail from "../ItemDetail";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
+
 
 function ItemDetailContainer(){
   const params = useParams();
-  const product = Products.find((productMock) => productMock.id == params.id);
+  const [product, setProduct] = useState(null);
 
-  return(
-    <div className='divCard'> 
-    <Card style={{ width: '18rem' }}>
-      <Card.Img variant="top" src={product.image}/>
-      <Card.Body>
-        <Card.Title>{product.name}</Card.Title>
-        <Card.Text>{product.description}</Card.Text>
-        <Card.Subtitle>{product.money} {product.price}</Card.Subtitle>
-        <Button variant="primary">Añadir al carrito</Button>
-      </Card.Body>
-    </Card>
+  useEffect(() => {
+    const db = getFirestore();
+    const itemRef = doc(db, "products", params.id);
+
+    getDoc(itemRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          setProduct({ id: snapshot.id, ...snapshot.data() });
+        }
+      })
+      .catch((error) => console.log({ error }));
+  }, []);
+
+
+
+  if (!product) {
+    return <div><Spinner animation="border" variant="primary" /></div>;
+  }
+
+  return (
+    <div>
+      <ItemDetail product={product} />
     </div>
-  )
+  );
+
 }
 
   
