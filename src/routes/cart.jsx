@@ -6,9 +6,14 @@ import { Context } from "../context";
 import Button from "react-bootstrap/Button";
 import Form from 'react-bootstrap/Form';
 import "../styles/cart.css";
+import { Link } from 'react-router-dom';
+import Card from 'react-bootstrap/Card';
+import React, { useState } from 'react';
 
   
   function Cart() {
+    const [orderId, setOrderId] = useState('');
+
     const { productsAdded, removeItem, clear } = useContext(Context);
 
      const db = getFirestore();
@@ -23,6 +28,8 @@ import "../styles/cart.css";
     const total = productsAdded.reduce(
       (acc, product) => acc + product.quantity * product.price,
       0);
+
+
 
   
     function sendOrder() {
@@ -50,14 +57,16 @@ import "../styles/cart.css";
              updateOrder(product.id, finalStock);
            });
 
-           window.location.href = `/checkout/${orderId}`
+           setOrderId(orderId);
+           clear();
+
        })
         .catch((error) => console.log({ error }));
-
+        
 
     }
 
-    if (productsAdded.length>0){
+    if (productsAdded.length>0 && !orderId){
   
     return (
       <div>
@@ -124,8 +133,28 @@ import "../styles/cart.css";
       </div>
     );
   }
-
-
+  else if (orderId)
+  {
+    return(
+      <div>
+        <NavBar/>
+        <div className='mensaje'>
+        <Card>
+          <Card.Header>Confirmacion de compra</Card.Header>
+          <Card.Body>
+            <Card.Title>Gracias por tu compra!</Card.Title>
+            <Card.Text>
+            A continuacion te mostramos el resumen de tu compra.
+            </Card.Text>
+            <Link to={`/checkout/${orderId}`}>
+            <Button variant="primary">IR AL RESUMEN</Button>
+            </Link>
+          </Card.Body>
+        </Card>
+        </div>
+      </div>
+        );
+  }
 else{
   return(
     <div>
